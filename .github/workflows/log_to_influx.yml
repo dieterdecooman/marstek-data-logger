@@ -1,0 +1,41 @@
+name: Log battery SOC to InfluxDB
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # every 5 minutes (UTC)
+  workflow_dispatch: {}
+
+permissions:
+  # no repo write permissions required since we don't commit files
+  contents: read
+
+jobs:
+  poll-and-write:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo (needed if script is in repo)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests influxdb-client
+
+      - name: Run logger and write to InfluxDB
+        env:
+          HAME_EMAIL: ${{ secrets.HAME_EMAIL }}
+          HAME_MD5_PASSWORD: ${{ secrets.HAME_MD5_PASSWORD }}
+          HAME_PASSWORD: ${{ secrets.HAME_PASSWORD }}
+          INFLUX_URL: ${{ secrets.INFLUX_URL }}
+          INFLUX_TOKEN: ${{ secrets.INFLUX_TOKEN }}
+          INFLUX_ORG: ${{ secrets.INFLUX_ORG }}
+          INFLUX_BUCKET: ${{ secrets.INFLUX_BUCKET }}
+        run: |
+          python log_to_influx.py
