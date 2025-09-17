@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 # - Uses Plotly with smooth (spline) lines for nicer visuals
 # -------------------
 
-st.set_page_config(page_title="Battery SOC — Influx viewer1", layout="wide")
+st.set_page_config(page_title="Battery SOC — Influx viewer", layout="wide")
 st.title("Battery SOC — InfluxDB Viewer")
 
 # --- Read Influx credentials from Streamlit secrets ---
@@ -154,8 +154,6 @@ fig = px.line(
     x="time_local",
     y="soc",
     color="device_id",
-# labels={"time_local": "Time (Europe/Brussels)", "soc": "State of Charge (%)", "device_id": "Device"},
-    labels={"time_local": "Time (Europe/Brussels)", "soc": "State of Charge (%)"},
     title=f"Battery SOC on {selected_date.isoformat()}",
     line_shape="spline",
 )
