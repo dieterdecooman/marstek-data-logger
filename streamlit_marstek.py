@@ -159,7 +159,7 @@ fig = px.line(
     line_shape="spline",
 )
 
-fig.update_layout(transition_duration=300)
+fig.update_layout(transition_duration=300,autosize=True)
 fig.update_traces(mode="lines+markers", marker=dict(size=4))
 fig.update_yaxes(range=[0, 100])
 
