@@ -193,10 +193,10 @@ def plot_bokeh_soc(plot_df: pd.DataFrame):
     )
 
     p.xaxis.formatter = DatetimeTickFormatter(
-        hours=["%H:%M"],
-        days=["%d %b"],
-        months=["%b %Y"],
-        years=["%Y"]
+    hours="%H:%M",
+    days="%d %b",
+    months="%b %Y",
+    years="%Y"
     )
     p.xaxis.major_label_orientation = math.pi / 4
     p.yaxis.axis_label = "State of Charge (%)"
