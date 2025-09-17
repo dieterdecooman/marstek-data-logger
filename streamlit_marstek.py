@@ -81,4 +81,18 @@ def plot_bokeh_soc(plot_df):
         # place legend below by putting it in a column layout under the figure
         # Bokeh's Legend can also be placed inside plot (location), but we want it below visually.
 
-        # The recommended way: build a column with the plot and then an empty widget space with the legend rendered belo
+        # The recommended way: build a column with the plot and then an empty widget space with the legend rendered below.
+        # Add legend as a separate layout element
+        # However Bokeh doesn't render Legend as standalone widget easily; we'll set legend location to "below"
+        p.add_layout(legend, 'below')
+
+    # Tidy toolbar: optionally remove some buttons via CSS or Bokeh config is limited.
+    # Bokeh's toolbar is rendered below by toolbar_location="below"
+
+    return p
+
+# Usage in Streamlit:
+from bokeh.embed import components
+from bokeh.resources import CDN
+p = plot_bokeh_soc(plot_df)
+st.bokeh_chart(p, use_container_width=True)
