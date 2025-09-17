@@ -161,7 +161,7 @@ fig = px.line(
 
 fig.update_layout(transition_duration=300,autosize=True)
 fig.update_traces(mode="lines+markers", marker=dict(size=4))
-fig.update_yaxes(range=[0, 100])
+#fig.update_yaxes(range=[0, 100])
 
 st.plotly_chart(fig, use_container_width=True,config={"responsive": True}  )
 
