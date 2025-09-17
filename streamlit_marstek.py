@@ -4,7 +4,7 @@ from influxdb_client import InfluxDBClient
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, HoverTool
 from bokeh.palettes import Category10
-from streamlit_bokeh import st_bokeh
+from streamlit_bokeh import streamlit_bokeh
 import pytz
 from datetime import datetime, timedelta
 
@@ -56,4 +56,4 @@ else:
     p.add_tools(HoverTool(tooltips=[("Time", "@_time{%F %H:%M}"), ("SOC", "@_value")],
                           formatters={"@_time": "datetime"}))
 
-    st_bokeh(p)
+    streamlit_bokeh(p)
