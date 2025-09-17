@@ -154,7 +154,8 @@ fig = px.line(
     x="time_local",
     y="soc",
     color="device_id",
-    labels={"time_local": "Time (Europe/Brussels)", "soc": "State of Charge (%)", "device_id": "Device"},
+# labels={"time_local": "Time (Europe/Brussels)", "soc": "State of Charge (%)", "device_id": "Device"},
+    labels={"time_local": "Time (Europe/Brussels)", "soc": "State of Charge (%)"},
     title=f"Battery SOC on {selected_date.isoformat()}",
     line_shape="spline",
 )
