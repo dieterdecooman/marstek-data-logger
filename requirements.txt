@@ -2,3 +2,4 @@ streamlit
 influxdb-client
 pandas
 plotly
+bokeh
