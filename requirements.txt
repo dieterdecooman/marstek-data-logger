@@ -1,7 +1,5 @@
-streamlit>=1.30
+streamlit
 pandas
 influxdb-client
-streamlit-bokeh
-bokeh>=3.0.0,<3.9
 python-dateutil
-pytz
+plotly
