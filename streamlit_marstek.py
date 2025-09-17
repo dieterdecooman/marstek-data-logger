@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 # - Uses Plotly with smooth (spline) lines for nicer visuals
 # -------------------
 
-st.set_page_config(page_title="Battery SOC — Influx viewer", layout="wide")
+st.set_page_config(page_title="Battery SOC — Influx viewer1", layout="wide")
 st.title("Battery SOC — InfluxDB Viewer")
 
 # --- Read Influx credentials from Streamlit secrets ---
