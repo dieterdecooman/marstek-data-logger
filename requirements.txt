@@ -3,3 +3,4 @@ influxdb-client
 pandas
 plotly
 bokeh==2.4.3
+numpy==1.23.5
