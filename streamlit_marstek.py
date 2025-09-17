@@ -152,7 +152,7 @@ df["time_local"] = df["time_utc"].dt.tz_convert("Europe/Brussels")
 # optional resampling / downsampling
 if sampling.startswith("resample"):
     try:
-        freq = "1T" if "1min" in sampling else "5T"
+        freq = "1T" if "1min" in sampling else "5min"
         df.set_index("time_local", inplace=True)
         agg = df.groupby("device_id").resample(freq)["soc"].mean().dropna()
         agg = agg.reset_index()
