@@ -127,43 +127,51 @@ st.write(f"Querying InfluxDB bucket: `{INFLUX_BUCKET}` from **{start_utc.isoform
 with st.spinner("Querying InfluxDB..."):
     df = query_influx(start_iso, end_iso)
 
+# Check for empty dataframe and handle it gracefully
 if df.empty:
     st.info("No data for selected day")
-    st.stop()
-
-# convert UTC times to local tz for display
-df["time_local"] = pd.to_datetime(df["time_utc"]).dt.tz_convert("Europe/Brussels")
-
-# optional resampling / downsampling
-if sampling.startswith("resample"):
-    try:
-        freq = "1T" if "1min" in sampling else "5T"
-        # We group by device and resample
-        df.set_index("time_local", inplace=True)
-        agg = df.groupby("device_id").resample(freq)["soc"].mean().dropna()
-        agg = agg.reset_index()
-        plot_df = agg
-    except Exception:
-        plot_df = df.reset_index(drop=True)
+    fig = px.line(title="No data to display")
+    fig.update_yaxes(range=[0, 100])
+    plot_df = pd.DataFrame() # Create an empty plot_df to avoid errors later
 else:
-    plot_df = df.reset_index(drop=True)
+    # convert UTC times to local tz for display
+    df["time_local"] = pd.to_datetime(df["time_utc"]).dt.tz_convert("Europe/Brussels")
 
-# Plot with plotly for smooth curves
-fig = px.line(
-    plot_df,
-    x="time_local",
-    y="soc",
-    #color="device_id",
-    labels={"time_local": "Time (Europe/Brussels)", "soc": "State of Charge (%)", "device_id": "Device"},
-    title=f"Battery SOC on {selected_date.isoformat()}",
-    line_shape="spline",
-)
+    # optional resampling / downsampling
+    if sampling.startswith("resample"):
+        try:
+            freq = "1T" if "1min" in sampling else "5T"
+            # We group by device and resample
+            df.set_index("time_local", inplace=True)
+            agg = df.groupby("device_id").resample(freq)["soc"].mean().dropna()
+            agg = agg.reset_index()
+            plot_df = agg
+        except Exception:
+            plot_df = df.reset_index(drop=True)
+    else:
+        plot_df = df.reset_index(drop=True)
 
-fig.update_layout(transition_duration=300,autosize=True)
+    # Plot with plotly for smooth curves
+    fig = px.line(
+        plot_df,
+        x="time_local",
+        y="soc",
+        #color="device_id",
+        labels={"time_local": "Time (Europe/Brussels)", "soc": "State of Charge (%)", "device_id": "Device"},
+        title=f"Battery SOC on {selected_date.isoformat()}",
+        line_shape="spline",
+    )
+    
+    # Set y-axis range only when data is available
+    fig.update_yaxes(range=[0, 100])
+
+# Ensure layout updates are applied to the final figure object
+fig.update_layout(transition_duration=300, autosize=True)
 fig.update_traces(mode="lines+markers", marker=dict(size=4))
-#fig.update_yaxes(range=[0, 100])
 
-st.plotly_chart(fig, use_container_width=True,config={"responsive": True}  )
+# This is the key to Streamlit responsiveness; ensure it's still here
+# `config={"responsive": True}` is an extra layer of protection, good to have
+st.plotly_chart(fig, use_container_width=True, config={"responsive": True})
 
 # show raw data toggle
 with st.expander("Show raw data"):
